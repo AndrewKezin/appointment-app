@@ -1,0 +1,18 @@
+model Car {
+ id             String  @id @default(cuid(2))
+ regNumber      String  @map("reg_number")
+ vinNumber      String  @unique @map("vin_number")
+ manufacturer   String
+ model          String
+ year           Int
+ color          String?
+ regCertificate String? @map("reg_certificate")
+ mileage        Int?
+ createdAt      DateTime @default(now())  @map("created_at")
+ updatedAt      DateTime @updatedAt @map("updated_at")
+
+ users          User[]
+ appointments   Appointment[]
+
+ @@map("cars")
+}

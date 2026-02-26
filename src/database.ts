@@ -1,3 +1,5 @@
+// файл database.ts для подключения к БД позволяет избежать создания нового экземпляра Prisma при каждой hot reload в режиме для разработки.
+
 // import { PrismaClient } from '@prisma/client';
 
 import { PrismaClient } from "@prisma/client/extension";
