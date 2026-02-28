@@ -4,6 +4,8 @@ import { createUserHandler, findAllUsersHandler } from './user-controller.js';
 
 const router = Router();
 
-router.get('/users', findAllUsersHandler);
+router.get('/', findAllUsersHandler);
 
-router.post('/users', createUserHandler);
+router.post('/', createUserHandler);
+
+export { router as userRoutes };

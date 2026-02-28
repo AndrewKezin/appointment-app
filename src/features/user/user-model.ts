@@ -1,9 +1,10 @@
 import { prisma } from '~/database.js';
-import type { Prisma, User } from '~/generated/prisma/client.js';
+import { Prisma, type User } from '~/generated/prisma/client.js';
+
 
 // Создать пользователя
 export async function createUser(user: Prisma.UserCreateInput) {
-  return prisma.user.create({ data: user });
+  return await prisma.user.create({ data: user });
 }
 
 // Поиск пользователя(-ей)
@@ -19,17 +20,17 @@ export async function findUserByEmail(email: User['email']) {
 
 // Найти пользователя по имени
 export async function findUserByName(name: User['name']) {
-  return prisma.user.findUnique({ where: { name } });
+  return prisma.user.findFirst({ where: { name } });
 }
 
 // Найти пользователя по телефону
 export async function findUserByPhone(phone: User['phone']) {
-  return prisma.user.findUnique({ where: { phone } });
+  return prisma.user.findFirst({ where: { phone } });
 }
 
 // Найти пользователя по адресу
 export async function findUserByAddress(address: User['address']) {
-  return prisma.user.findUnique({ where: { address } });
+  return prisma.user.findFirst({ where: { address } });
 }
 
 // Найти пользователей по дате регистрации
@@ -48,6 +49,7 @@ export async function findAllUsers({
   limit?: number;
 }) {
   const skip = (page - 1) * limit;
+
   return prisma.user.findMany({
     skip,
     take: limit,
