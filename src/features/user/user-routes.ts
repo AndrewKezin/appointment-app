@@ -1,10 +1,12 @@
 import { Router } from 'express';
 
-import { createUserHandler, findAllUsersHandler } from './user-controller.js';
+import { createUserHandler, findAllUsersHandler, findUserByIdHandler } from './user-controller.js';
 
 const router = Router();
 
 router.get('/', findAllUsersHandler);
+
+router.get('/:id', findUserByIdHandler);
 
 router.post('/', createUserHandler);
 

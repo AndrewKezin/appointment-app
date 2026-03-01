@@ -1,3 +1,9 @@
+enum Role {
+  USER  @map("user")
+  ADMIN @map("admin")
+  @@map("user_role")
+}
+
 model User {
   id             String   @id @default(cuid(2))
   email          String   @unique
@@ -5,6 +11,7 @@ model User {
   hashedPassword String   @map("hashed_password")
   phone          String
   address        String?
+  role           Role     @default(USER)
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
