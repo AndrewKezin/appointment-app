@@ -2,30 +2,60 @@ import { prisma } from '~/database.js';
 import { Prisma, type User } from '~/generated/prisma/client.js';
 import { prismaHandler } from '~/utils/prisma-handler.js';
 
-// Найти всех пользователей (учитывая пагинацию)
-export async function findAllUsers({
-  email,
-  name,
-  phone,
-  address,
-  created_at,
-  page = 1,
-  limit = 10,
-}: {
+interface UserSearchParams {
   email?: string;
   name?: string;
   phone?: string;
   address?: string;
-  created_at?: Date;
+  createdAt?: string;
   page?: number;
   limit?: number;
-}) {
-  const skip = (page - 1) * limit;
+}
+
+// Найти всех пользователей (учитывая пагинацию)
+export async function findAllUsers(filter: UserSearchParams) {
+  const {
+    email,
+    name,
+    phone,
+    address,
+    createdAt,
+    page = 1,
+    limit = 5,
+  } = filter;
+
+  const skip = (Number(page) - 1) * Number(limit);
+
+  if (!email && !name && !phone && !address && !createdAt)
+    return prismaHandler(() =>
+      prisma.user.findMany({
+        take: Number(limit),
+        skip,
+        orderBy: { createdAt: 'desc' },
+        omit: { hashedPassword: true },
+      }),
+    );
+
+  if (email)
+    return prismaHandler(() =>
+      prisma.user.findUnique({
+        where: { email },
+        omit: { hashedPassword: true },
+      }),
+    );
 
   return prismaHandler(() =>
     prisma.user.findMany({
-      skip,
+      where: {
+        AND: [
+          { name: { contains: name } },
+          { phone: { contains: phone } },
+          { address: { contains: address } },
+          // { createdAt: { equals: new Date(createdAt)  } },
+        ],
+      },
       take: limit,
+      skip,
       orderBy: { createdAt: 'desc' },
       omit: { hashedPassword: true },
     }),
