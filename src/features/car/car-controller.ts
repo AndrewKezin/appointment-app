@@ -1,3 +1,5 @@
-import { prisma } from "~/database.js";
+import { prisma } from '~/database.js';
 
-import type { Prisma, Car } from "~/generated/prisma/client.js";
+import type { Prisma, Car } from '~/generated/prisma/client.js';
+
+

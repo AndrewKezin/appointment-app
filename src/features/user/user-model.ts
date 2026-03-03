@@ -1,5 +1,5 @@
 import { prisma } from '~/database.js';
-import { Prisma, type User } from '~/generated/prisma/client.js';
+import { Prisma, Role, type User } from '~/generated/prisma/client.js';
 import { prismaHandler } from '~/utils/prisma-handler.js';
 
 interface UserSearchParams {
@@ -8,6 +8,7 @@ interface UserSearchParams {
   phone?: string;
   address?: string;
   createdAt?: string;
+  role?: Role;
   page?: number;
   limit?: number;
 }
@@ -20,6 +21,7 @@ export async function findAllUsers(filter: UserSearchParams) {
     phone,
     address,
     createdAt,
+    role,
     page = 1,
     limit = 5,
   } = filter;
@@ -51,6 +53,7 @@ export async function findAllUsers(filter: UserSearchParams) {
           { name: { contains: name } },
           { phone: { contains: phone } },
           { address: { contains: address } },
+          { role: { equals: role } },
           // { createdAt: { equals: new Date(createdAt)  } },
         ],
       },

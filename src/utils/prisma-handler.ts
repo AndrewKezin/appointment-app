@@ -1,6 +1,6 @@
 import { Prisma } from '~/generated/prisma/client.js';
 
-const prismaErrorMapping: Record<string, string> = {
+export const prismaErrorMapping: Record<string, string> = {
   P2001: 'The record searched for in the where condition does not exist',
   P2002: 'User with this email already exists',
   P1001:
@@ -14,6 +14,9 @@ export async function prismaHandler<T>(func: () => Promise<T>) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       const error = prismaErrorMapping[err.code];
       if (error) throw new Error(error);
+    } else if (err instanceof Prisma.PrismaClientValidationError) {
+      throw new Error('Ошибка валидации данных');
+    } else {
       throw err;
     }
   }
