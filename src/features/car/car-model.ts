@@ -13,8 +13,8 @@ interface ICarFilter {
   regCertificate?: string;
   mileage?: number;
   createdAt?: string;
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 }
 
 export async function createCar(data: Prisma.CarCreateInput) {
@@ -36,8 +36,8 @@ export async function findCars(filter: ICarFilter) {
     regCertificate,
     mileage,
     createdAt,
-    page,
-    limit,
+    page = 1,
+    limit = 5,
   } = filter;
 
   const skip = (page - 1) * limit;
